@@ -1,12 +1,14 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const Promotions = require('../models/promotions');
 
 const promotionRouter = express.Router();
 
-promotionRouter.use(bodyParser.json());
+promotionRouter.use(express.json());
+promotionRouter.use(express.urlencoded({
+  extended: true
+}));
 
 promotionRouter.route('/')
 .get((req, res, next) => {
