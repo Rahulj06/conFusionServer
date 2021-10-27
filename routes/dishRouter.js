@@ -126,21 +126,13 @@ dishRouter.route('/:dishId/comments')
     res.statusCode=403;
     res.end('PUT operation is not supported on /dishes/' +req.params.dishId + '/comments');
 })
-.delete(authenticate.verifyUser, (req, res, next) => {
+.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Dishes.findById(req.params.dishId)
     .then((dish) => {
         if(dish != null){
-            const comment = dish.comments.id(req.params.commentId);
-            if (req.user._id.equals(comment.author)){
-                for (var i = (dish.comments.length -1); i>=0; i--) {
-                    dish.comments.id(dish.comments[i]._id).remove();
-                }  
-            }
-            else {
-                const err = new Error('You are not authorized to delete this comment!');
-                err.status = 403;
-                return next(err);  
-            }
+            for (var i = (dish.comments.length -1); i>=0; i--) {
+                dish.comments.id(dish.comments[i]._id).remove();
+            }  
             dish.save()
             .then((dish) => {
                 res.statusCode =  200;
