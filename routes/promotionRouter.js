@@ -15,7 +15,7 @@ promotionRouter.use(express.urlencoded({
 promotionRouter.route('/')
 .options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
 .get((req, res, next) => {
-    Promotions.find({})
+    Promotions.find(req.query)
     .then((promotions) => {
         res.statusCode =  200;
         res.setHeader('Content-Type', 'application/json');
